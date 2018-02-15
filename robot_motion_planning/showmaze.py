@@ -109,7 +109,7 @@ class display_robot(object):
         if (x_range + y_range) >= 0: mod = 1
         else: mod = -1
         
-        for i in range(0, abs(x_range + y_range + mod), 10):
+        for i in range(0, abs(int(x_range) + int(y_range) + mod), 10):
             if abs(x_range) > abs(y_range):
                 self.pen.goto(x_start + mod*i, y_start)
             else:
@@ -124,7 +124,8 @@ class display_robot(object):
 
         
 if __name__ == '__main__':
-    testmaze = Maze( str(sys.argv[1]) )
+    testmaze = Maze("test_maze_01.txt")
+    # testmaze = Maze( str(sys.argv[1]) )
     maze_window = display_maze(testmaze, cell_size = 40)
     bot = display_robot(maze_window)
     import time

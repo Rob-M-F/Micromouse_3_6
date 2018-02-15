@@ -15,15 +15,18 @@ class Maze(object):
         The initialization function also performs some consistency checks for
         wall positioning.
         '''
+
         with open(filename, 'rb') as f_in:
 
             # First line should be an integer with the maze dimensions
-            self.dim = int(f_in.next())
+            
+            self.dim = int(f_in.readline())
 
             # Subsequent lines describe the permissability of walls
             walls = []
             for line in f_in:
-                walls.append(map(int,line.split(',')))
+                
+                walls.append([int(x) for x in line.decode('ascii').split(',')])
             self.walls = np.array(walls)
 
         # Perform validation on maze
@@ -40,6 +43,7 @@ class Maze(object):
             for y in range(self.dim):
                 if (self.walls[x,y] & 2 != 0) != (self.walls[x+1,y] & 8 != 0):
                     wall_errors.append([(x,y), 'v'])
+        
         # horizontal walls
         for y in range(self.dim-1):
             for x in range(self.dim):
@@ -50,10 +54,10 @@ class Maze(object):
             for cell, wall_type in wall_errors:
                 if wall_type == 'v':
                     cell2 = (cell[0]+1, cell[1])
-                    print 'Inconsistent vertical wall betweeen {} and {}'.format(cell, cell2)
+                    print('Inconsistent vertical wall betweeen {} and {}'.format(cell, cell2))
                 else:
                     cell2 = (cell[0], cell[1]+1)
-                    print 'Inconsistent horizontal wall betweeen {} and {}'.format(cell, cell2)
+                    print('Inconsistent horizontal wall betweeen {} and {}'.format(cell, cell2))
             raise Exception('Consistency errors found in wall specifications!')
 
 
@@ -69,7 +73,7 @@ class Maze(object):
         try:
             return (self.walls[tuple(cell)] & dir_int[direction] != 0)
         except:
-            print 'Invalid direction provided!'
+            print('Invalid direction provided!')
 
 
     def dist_to_wall(self, cell, direction):
